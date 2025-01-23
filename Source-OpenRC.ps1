@@ -11,8 +11,7 @@
    Source-OpenRC H:\project-openrc.sh
 .LINK
    http://openstack.naturalis.nl
-   https://www.linkedin.com/in/soheil-amiri-4bb785218/
-   
+
 
 #>
 
@@ -92,7 +91,8 @@ Else {
         Write-Host "Opnestack Password:*******" -ForegroundColor Yellow
 }
     else {
-        Write-Host-Host 'No Password found.  Set with $OS_PASSWORD=YourPassword'
+        Write-Host 'No Password found.' -ForegroundColor Red
+        $OS_PASSWORD = Read-Host "Please enter your password" -MaskInput
     }
 	###Adding variable OS_REGION_NAME and OS_IDENTITY_API_VERSION
 	
