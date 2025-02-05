@@ -11,6 +11,7 @@
    Source-OpenRC H:\project-openrc.sh
 .LINK
    http://openstack.naturalis.nl
+   https://www.linkedin.com/in/soheil-amiri-4bb785218/
 
 
 #>
@@ -40,6 +41,7 @@ Else {
     #
     # *NOTE*: Using the 2.0 *auth api* does not mean that compute api is 2.0.  We
     # will use the 1.1 *compute api*
+    
     $os_project_name = Select-String -Path $openrc -Pattern 'export OS_PROJECT_NAME'
     If ($os_project_name) {
         $OS_PROJECT_NAME = ([string]($os_project_name)).Split("=")[1].Replace("`"","")
@@ -50,16 +52,6 @@ Else {
         Exit
     }
 
-    # With the addition of Keystone we have standardized on the term **tenant**
-    # as the entity that owns the resources.
-    #$os_tenant_id = Select-String -Path $openrc -Pattern 'OS_TENANT_ID'
-    #If ($os_tenant_id) {
-    #    $env:OS_TENANT_ID = ([string]($os_tenant_id)).Split("=")[1].Replace("`"","")
-    #}
-    #Else {
-    #    Write-Host $rcerror
-    #    Exit
-    #}
     $os_auth_url = Select-String -Path $openrc -Pattern 'export OS_AUTH_URL'
     If ($os_auth_url) {
         $OS_AUTH_URL = ([string]($os_auth_url)).Split("=")[1].Replace("`"","")
@@ -84,8 +76,7 @@ Else {
     }
 
     # With Keystone you pass the keystone password.
-    $openrc = "E:\download\admin-openrc.sh"
-    $temp_password = Select-String -Path $openrc -Pattern 'export OS_PASSWORD'
+    $temp_password = Select-String -Path $openrc -Pattern 'OS_PASSWORD'
     if ($temp_password -match "OS_PASSWORD='(.+?)'"){
         $OS_PASSWORD = $matches[1]
         Write-Host "Opnestack Password:*******" -ForegroundColor Yellow
@@ -114,7 +105,7 @@ Else {
         Write-Host $rcerror
         Exit
     }
-    $OS_PROJECT_ID = Select-String -Path $openrc -Pattern 'oS_PROJECT_ID'
+$OS_PROJECT_ID = Select-String -Path $openrc -Pattern 'oS_PROJECT_ID'
 If ($OS_PROJECT_ID) {
     $OS_PROJECT_ID = ([string]($OS_PROJECT_ID)).Split("=")[1].Replace("`"","")
     Write-Host "Project ID:"$OS_PROJECT_ID -ForegroundColor Yellow
@@ -123,6 +114,18 @@ Else {
     Write-Host $rcerror
     Exit
 }
+
+$OS_USER_DOMAIN_NAME = Select-String -Path E:\download\Network-team-openrc.sh -Pattern 'export OS_USER_DOMAIN_NAME'
+    If ($OS_USER_DOMAIN_NAME) {
+        $OS_USER_DOMAIN_NAME = ([string]($OS_USER_DOMAIN_NAME)).Split("=")[1].Replace("`"","")
+        Write-Host "Openstack Domain Name:"$OS_USER_DOMAIN_NAME -ForegroundColor Yellow
+    }
+    Else {
+        Write-Host $rcerror
+        Exit
+    }
+
+
 }
 Write-Host "Applying Enviromental variable..." -ForegroundColor White
 $env:OS_USERNAME="$OS_USERNAME"
@@ -130,4 +133,9 @@ $env:OS_PASSWORD = "$OS_PASSWORD"
 $env:OS_IDENTITY_API_VERSION="$OS_IDENTITY_API_VERSION"
 $env:OS_AUTH_URL="$OS_AUTH_URL"
 $env:OS_PROJECT_ID="$OS_PROJECT_ID"
+$env:OS_USER_DOMAIN_NAME = "$OS_USER_DOMAIN_NAME"
 Write-Host "Done." -ForegroundColor Green
+
+
+
+
