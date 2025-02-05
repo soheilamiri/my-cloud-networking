@@ -115,7 +115,7 @@ Else {
     Exit
 }
 
-$OS_USER_DOMAIN_NAME = Select-String -Path E:\download\Network-team-openrc.sh -Pattern 'export OS_USER_DOMAIN_NAME'
+$OS_USER_DOMAIN_NAME = Select-String -Path $openrc -Pattern 'export OS_USER_DOMAIN_NAME'
     If ($OS_USER_DOMAIN_NAME) {
         $OS_USER_DOMAIN_NAME = ([string]($OS_USER_DOMAIN_NAME)).Split("=")[1].Replace("`"","")
         Write-Host "Openstack Domain Name:"$OS_USER_DOMAIN_NAME -ForegroundColor Yellow
